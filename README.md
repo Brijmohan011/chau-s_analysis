@@ -1,7 +1,7 @@
 ## Introduction
 
 
-<b>Discipline | <b>chusna  nhi aata hai to sikhna hai
+<b>Discipline | <b> mohan 
 :--|:--|
 <b> Lab | <b> Mini project of 2nd year
 <b> Experiment|     <b> Chuha mar ke dikhana hai
