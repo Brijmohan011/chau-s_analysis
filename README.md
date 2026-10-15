@@ -27,7 +27,7 @@ Applications: Exploring chaos-based communication, nonlinear systems, and signal
 <b>Name of Developer | <b> Brijmohan vishawakarma 
 
 <b> Institute | <b> rajkiya Engineering College Banda  
-<b> Email id|     <b>  brijmohanv063@gmail.com
+<b> Email id| <b>  brijmohanv063@gmail.com<br>
 <b> Department | <b> Information technology
 
 ### Contributors List
