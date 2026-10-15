@@ -4,7 +4,7 @@
 <b>Discipline | <b> mohan 
 :--|:--|
 <b> Lab | <b> Mini project of 2nd year
-<b> Experiment|     <b> Chuha mar ke dikhana hai
+<b> Experiment|     <b> l;nkhjgchu9oisdbjchadhou;icvs
 
 ### About the Experiment 
 
