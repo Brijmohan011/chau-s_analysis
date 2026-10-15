@@ -1,13 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<!-- Add CSS at the head of HTML file -->
-    <link rel="stylesheet" href="./css/main.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chua's Circuit Virtual Lab</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-		<!-- Your code goes here-->
+  <header class="topbar">
+    <div class="brand-mark">∿</div>
+    <div>
+      <h1>Chua's Circuit <span>Virtual Lab</span></h1>
+      <p>Nonlinear dynamics · Electronic chaos generation</p>
+    </div>
+    <div class="status"><span id="statusDot"></span><span id="statusText">Ready</span></div>
+  </header>
 
-	<!-- Add JS at the bottom of HTML file --> 
-        <script src="./js/main.js"></script>
+  <main class="layout">
+    <section class="panel hero">
+      <div>
+        <p class="eyebrow">INTERACTIVE EXPERIMENT</p>
+        <h2>Explore deterministic chaos</h2>
+        <p class="intro">Adjust circuit parameters, run the numerical model, and observe voltage waveforms and the phase-plane attractor.</p>
+      </div>
+      <div class="hero-stats">
+        <div><span class="stat-label">MODEL</span><strong>3-state ODE</strong></div>
+        <div><span class="stat-label">SOLVER</span><strong>RK4</strong></div>
+        <div><span class="stat-label">OUTPUTS</span><strong>v₁ · v₂ · iL</strong></div>
+      </div>
+    </section>
+
+    <section class="panel circuit-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">01 / CIRCUIT</p><h2>Chua circuit schematic</h2></div>
+        <span class="tag">Conceptual schematic</span>
+      </div>
+      <div class="schematic-wrap">
+        <svg class="schematic" viewBox="0 0 760 330" role="img" aria-label="Conceptual Chua circuit schematic">
+          <g class="wire">
+            <path d="M100 70 H250 M250 70 H365 M365 70 H480 M480 70 H650 V250 H100 V70"/>
+            <path d="M250 70 V112 M250 168 V250"/>
+            <path d="M365 70 V112 M365 168 V250"/>
+            <path d="M480 70 V125 M480 195 V250"/>
+          </g>
+          <g class="component">
+            <rect x="222" y="112" width="56" height="56" rx="3"/>
+            <rect x="337" y="112" width="56" height="56" rx="3"/>
+            <path d="M222 132 H278 M222 148 H278 M337 132 H393 M337 148 H393"/>
+            <path d="M462 125 h36 v10 h-36 v10 h36 v10 h-36 v10 h36 v10 h-36 v10 h36 v10 h-36" />
+          </g>
+          <g class="labels">
+            <text x="250" y="101" text-anchor="middle">C₁</text>
+            <text x="365" y="101" text-anchor="middle">C₂</text>
+            <text x="510" y="160">L</text>
+            <text x="150" y="57">R</text>
+            <text x="110" y="150">Chua diode</text>
+            <text x="250" y="195" text-anchor="middle">v₁</text>
+            <text x="365" y="195" text-anchor="middle">v₂</text>
+            <text x="520" y="220">iL</text>
+            <text x="390" y="286" text-anchor="middle">Common reference / ground</text>
+          </g>
+          <g class="component nonlinear">
+            <rect x="58" y="112" width="105" height="56" rx="5"/>
+            <path d="M73 140 H88 L97 126 L111 154 L125 126 L139 154 L148 140"/>
+          </g>
+          <g class="ground">
+            <path d="M390 250 V267 M373 267 H407 M379 274 H401 M385 281 H395"/>
+          </g>
+          <g class="nodes">
+            <circle cx="250" cy="70" r="5"/><circle cx="365" cy="70" r="5"/><circle cx="480" cy="70" r="5"/>
+            <circle cx="250" cy="250" r="5"/><circle cx="365" cy="250" r="5"/>
+          </g>
+        </svg>
+      </div>
+      <p class="note">Simplified learning schematic. The simulation below solves the standard dimensionless Chua equations; this drawing is illustrative rather than a wiring/netlist diagram.</p>
+    </section>
+
+    <section class="panel controls-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">02 / PARAMETERS</p><h2>Simulation controls</h2></div>
+        <button class="secondary" id="resetBtn">Reset defaults</button>
+      </div>
+      <div class="controls-grid">
+        <label class="control"><span>α (alpha) <b id="alphaVal">15.6</b></span><input id="alpha" type="range" min="8" max="20" step="0.1" value="15.6"><small>Capacitance / conductance ratio</small></label>
+        <label class="control"><span>β (beta) <b id="betaVal">28</b></span><input id="beta" type="range" min="15" max="40" step="0.1" value="28"><small>Inductance-related parameter</small></label>
+        <label class="control"><span>m₀ <b id="m0Val">-1.143</b></span><input id="m0" type="range" min="-1.5" max="-0.5" step="0.001" value="-1.143"><small>Inner diode slope</small></label>
+        <label class="control"><span>m₁ <b id="m1Val">-0.714</b></span><input id="m1" type="range" min="-1.2" max="-0.1" step="0.001" value="-0.714"><small>Outer diode slope</small></label>
+        <label class="control"><span>Time step <b id="dtVal">0.01</b></span><input id="dt" type="range" min="0.002" max="0.02" step="0.001" value="0.01"><small>Numerical integration step</small></label>
+        <label class="control"><span>Initial v₁ <b id="v1Val">0.2</b></span><input id="v1" type="range" min="-1" max="1" step="0.05" value="0.2"><small>Initial condition</small></label>
+      </div>
+      <div class="button-row">
+        <button id="runBtn" class="primary">▶ Run simulation</button>
+        <button id="pauseBtn" class="secondary" disabled>Ⅱ Pause</button>
+        <button id="stepBtn" class="secondary">Single run</button>
+      </div>
+      <p class="note">Changing parameters resets the current run. Chaotic behavior depends on parameters and initial conditions; not every setting produces a double-scroll attractor.</p>
+    </section>
+
+    <section class="panel chart-panel">
+      <div class="section-heading"><div><p class="eyebrow">03 / TIME DOMAIN</p><h2>Voltage waveform</h2></div><span class="tag">v₁ and v₂ vs time</span></div>
+      <div class="chart-box"><canvas id="waveChart"></canvas></div>
+    </section>
+
+    <section class="panel chart-panel">
+      <div class="section-heading"><div><p class="eyebrow">04 / PHASE SPACE</p><h2>Double-scroll attractor</h2></div><span class="tag">v₂ vs v₁</span></div>
+      <div class="chart-box"><canvas id="phaseChart"></canvas></div>
+    </section>
+
+    <section class="panel chart-panel compact">
+      <div class="section-heading"><div><p class="eyebrow">05 / STATE</p><h2>Inductor current state</h2></div><span class="tag">iL vs time</span></div>
+      <div class="chart-box"><canvas id="currentChart"></canvas></div>
+    </section>
+
+    <section class="panel theory-panel">
+      <div class="section-heading"><div><p class="eyebrow">06 / THEORY</p><h2>Model and equations</h2></div></div>
+      <p>This virtual lab integrates the dimensionless Chua system with a fourth-order Runge–Kutta (RK4) method. State variables are x, y, z; plotted x and y correspond to scaled capacitor voltages, while z is related to inductor current.</p>
+      <div class="equations">
+        <code>dx/dτ = α [ y − x − h(x) ]</code>
+        <code>dy/dτ = x − y + z</code>
+        <code>dz/dτ = −β y</code>
+        <code>h(x) = m₁x + ½(m₀ − m₁)(|x+1| − |x−1|)</code>
+      </div>
+      <p class="note">This is a normalized mathematical model, not a hardware-accurate component-level SPICE simulation. For physical circuit design, validate component values and scaling separately.</p>
+    </section>
+
+    <footer>Chua's Circuit Virtual Lab · Educational simulation · Use parameter controls to explore nonlinear dynamics</footer>
+  </main>
+  <script src="js/"></script>
 </body>
 </html>
