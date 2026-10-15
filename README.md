@@ -1,7 +1,7 @@
 ## Introduction
 
 
-<b>Discipline | <b style="background-color:aqua;">INFORMATION TECHNOLOGY
+<b>Discipline | <b>INFORMATION TECHNOLOGY
 :--|:--|
 <b> Lab | <b> Chua’s Circuit Analysis for Electronic Chaos Generation.
 <b> Experiment 1|     <b> Chua’s Circuit Analysis for Electronic Chaos Generation.
