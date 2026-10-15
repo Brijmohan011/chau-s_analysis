@@ -25,7 +25,7 @@ Chaos analysis: Observing the double-scroll attractor and how circuit parameters
 Applications: Exploring chaos-based communication, nonlinear systems, and signal generation.
 
 <img src="image/IKvSzUJI7vsdZXEPCeC2zMXNL9B64QCAuEwoJhBxhRN9qDYUd6kMN7Qe_ir9EucqPhFwUAu5ynUPpw4uIJMa45OWp6ohTm66VM-QYrVOw0SiqxA4XuoiWNEDmoDZSAnY7ojojey3fnjXzOi1jrOX8O95TRDKn_-bMdoaSjRXBC2FEwtgPaxbeqivRz1CG84K.jpg" >
-
+<img src="">
 
 <b>Name of Developer | <b> Brijmohan vishawakarma 
 
