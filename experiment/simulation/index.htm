@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    #req{
+    border:2px solid black;
+    height: 200px ;
+    width: 100%;
+    display:flex;
+    flex-wrap: nowrap;
+}
+.labtag , .tag {
+    
+    text-align: center;
+}
+.instrument{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 25px auto;
+
+}
+.resistor{
+    height: 100px ;
+    width: 100px;
+    background-image: url(electronic-resistor-precision-component-in-electrical-circuits-png.webp);
+    background-size: cover;
+    
+}
+.circuit {
+  width: min(600px, 95%);
+  height: 300px;
+  margin: 35px auto;
+  position: relative;
+}
+.wire {
+  position: absolute;
+  background: #2563eb;
+  z-index: 0;
+}
+.wire-top, .wire-bottom {
+  height: 4px;
+  left: 12%;
+  right: 12%;
+}
+.wire-top { top: 18%; }
+.wire-bottom { bottom: 18%; }
+.wire-left, .wire-right ,.wire-c1, .wire-c2 {
+  width: 4px;
+  top: 18%;
+  bottom: 18%;
+}
+.wire-left { left: 12%; }
+.wire-right { right: 12%; }
+.wire-c1 { left: 35%; }
+.wire-c2 { right: 35%; }
+.slot {
+  position: absolute;
+  z-index: 1;
+  width: 100px;
+  min-height: 75px;
+  padding: 10px 5px;
+  background: white;
+  border: 2px dashed #64748b;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+}
+.inductor-slot { left: 2%; top: 39%; }
+.resistor-slot { left: 50%; top: 0; transform: translateX(-50%); }
+.bulb-slot { right: 2%; top: 39%; }
+.c2-slot{
+    right: 25%; top: 39%;
+}
+.c1-slot { left: 25%; top: 39%; }
+.slot.over { background: #dbeafe; border-color: #2563eb; }
+.slot.filled { border: 2px solid #16a34a; background: #f0fdf4; }
+.placed-symbol { font-size: 28px; }
+#message { min-height: 24px; font-weight: bold; }
+button {
+  padding: 11px 24px;
+  background: #075985;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 16px;
+}
+button:hover { background: #0369a1; }
+
+@media (max-width: 450px) {
+  .slot { width: 95px; font-size: 11px; }
+  .circuit { height: 260px; }
+}
+
+
+</style>
+</head>
+<body>
+    <h1 class="tag ">Required Instruments</h1>
+    <div id="req">
+        
+       
+        <span class="instrument" draggable="true"data-type="inductor">inductor </span>
+        <span class="instrument" draggable="true"data-type="resistor">Resistor </span>
+        <span class="instrument" draggable="true"data-type="Nonlinear">Nonlinear resistor </span>
+        <span class="instrument" draggable="true"data-type="c1">capcitor 1 </span>
+        <span class="instrument" draggable="true"data-type="c2">capcitor 2 </span>
+      
+    </div>
+   <h1 class="labtag ">LAb Space </h1>
+   <div class="circuit">
+    <div class="wire wire-top"></div>
+    <div class="wire wire-left"></div>
+    <div class="wire wire-c2"></div>
+    <div class="wire wire-c1"></div>
+    <div class="wire wire-right"></div>
+    <div class="wire wire-bottom"></div>
+    
+    <div class="slot inductor-slot" data-type="inductor">
+      <span class="placeholder">inductor</span>
+    </div>
+    <div class="slot resistor-slot" data-type="resistor">
+      <span class="placeholder">resistor</span>
+    </div>
+    <div class="slot bulb-slot" data-type="Nonlinea">
+      <span class="placeholder">Nonlinear Resistor</span>
+    </div>
+    <div class="slot c2-slot" data-type="c1">
+      <span class="placeholder">capcitor 1</span>
+    </div><div class="slot c1-slot" data-type="c2">
+      <span class="placeholder">capcitor 2</span>
+    </div>
+   
+  </div>
+ <p id="message">Drag each instrument into its correct circuit position.</p>
+  <button id="resetBtn">Reset Circuit</button>
+  <script>
+    const instruments = document.querySelectorAll(".instrument");
+const slots = document.querySelectorAll(".slot");
+const message = document.getElementById("message");
+const resetBtn = document.getElementById("resetBtn");
+
+
+const symbols = {
+  battery: "🔋",
+  resistor: "〰",
+  bulb: "💡"
+};
+instrument.forEach((instrument) => {
+  instrument.addEventListener("dragstart", (event) => {
+    if (instrument.classList.contains("used")) {
+      event.preventDefault();
+      return;
+    }
+    event.dataTransfer.setData("text/plain", instrument.dataset.type);
+  });
+});
+slots.forEach((slot) => {
+  slot.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    if (!slot.classList.contains("filled")) slot.classList.add("over");
+  });
+  slot.addEventListener("dragleave", () => {
+    slot.classList.remove("over");
+  });
+   slot.addEventListener("drop", (event) => {
+    event.preventDefault();
+    slot.classList.remove("over");
+  </script>
+</body>
+</html>
