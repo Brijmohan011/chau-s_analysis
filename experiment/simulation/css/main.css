@@ -1,1 +1,14 @@
-/* You CSS goes in here */
+:root{--bg:#081321;--panel:#102238;--panel2:#142c45;--line:#28445f;--cyan:#35d6e8;--orange:#ffb454;--text:#eaf3fb;--muted:#9bb0c4}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#07111e,#0b1d30);color:var(--text);font:15px/1.5 Inter,Segoe UI,Arial,sans-serif}
+header{padding:24px clamp(16px,4vw,52px);border-bottom:1px solid var(--line);background:#091827}
+.kicker{color:var(--cyan);font-size:12px;letter-spacing:2px;font-weight:700}h1{margin:5px 0;font-size:clamp(24px,4vw,36px)}header p{margin:4px 0;color:var(--muted)}
+main{max-width:1400px;margin:auto;padding:22px;display:grid;grid-template-columns:310px 1fr;gap:18px}
+.panel{background:linear-gradient(160deg,var(--panel),#0c1b2c);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 12px 30px #0003}
+h2{font-size:17px;margin:0 0 13px}h3{font-size:14px;margin:18px 0 8px;color:var(--cyan)}
+label{display:flex;justify-content:space-between;color:#c5d5e4;font-size:13px;margin:12px 0 4px}
+input[type=range]{width:100%;accent-color:var(--cyan)}.value{color:var(--orange);font-variant-numeric:tabular-nums}
+.buttons{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}button{border:0;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer;background:var(--cyan);color:#061522}button.secondary{background:#24415d;color:var(--text)}button:disabled{opacity:.45;cursor:not-allowed}
+.note{font-size:12px;color:var(--muted);margin-top:14px}.workspace{display:grid;gap:18px}.topgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.canvas-wrap{background:#06111e;border:1px solid #203b54;border-radius:10px;padding:8px}canvas{width:100%;display:block;height:260px}.wide canvas{height:330px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.stat{background:var(--panel2);padding:10px;border-radius:9px}.stat small{display:block;color:var(--muted)}.stat strong{font-size:18px;color:var(--orange)}
+.diagram{width:100%;height:auto;background:#071522;border-radius:10px;border:1px solid #203b54}.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:8px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+footer{max-width:1400px;margin:0 auto;padding:0 22px 28px;color:var(--muted);font-size:12px}
+@media(max-width:900px){main{grid-template-columns:1fr}.topgrid{grid-template-columns:1fr}} 
