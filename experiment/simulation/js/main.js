@@ -1,51 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Chua's Circuit | Virtual Laboratory</title>
-<head>
-    <link rel="stylesheet" href="css/main.css">
-</head>
-<body>
-<header><div class="kicker">ELECTRONICS • NONLINEAR DYNAMICS • VIRTUAL LAB</div><h1>Chua's Circuit Analysis for Electronic Chaos Generation</h1><p>Interactive numerical experiment · Dimensionless state-space model · Double-scroll attractor</p></header>
-<main>
-<aside class="panel">
-<h2>Experiment Controls</h2>
-<p style="color:var(--muted);font-size:13px">Change model parameters and observe how the chaotic response evolves.</p>
-<div id="controls"></div>
-<div class="buttons"><button id="start">▶ Start</button><button class="secondary" id="pause">Ⅱ Pause</button><button class="secondary" id="reset">↺ Reset</button></div>
-<div class="buttons"><button class="secondary" id="preset">Load classic preset</button><button class="secondary" id="download">Export CSV</button></div>
-<h3>Initial conditions</h3>
-<label>x(0) <span class="value" id="x0v">0.10</span></label><input id="x0" type="range" min="-2" max="2" step=".01" value=".1">
-<label>y(0) <span class="value" id="y0v">0.00</span></label><input id="y0" type="range" min="-2" max="2" step=".01" value="0">
-<label>z(0) <span class="value" id="z0v">0.00</span></label><input id="z0" type="range" min="-3" max="3" step=".01" value="0">
-<p class="note">This is a dimensionless mathematical simulation, not a physical circuit measurement. The component-level schematic is a conceptual reference; real hardware requires component selection, tolerances and safety review.</p>
-</aside>
-<section class="workspace">
-<div class="panel"><h2>Conceptual Chua's Circuit</h2>
-<svg class="diagram" viewBox="0 0 900 230" role="img" aria-label="Conceptual Chua circuit block diagram">
-<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="#35d6e8"/></marker></defs>
-<g fill="none" stroke="#35d6e8" stroke-width="3"><path d="M80 100 H220 M320 100 H440 M540 100 H680" marker-end="url(#arr)"/><path d="M270 100 V165 M490 100 V165" stroke="#ffb454"/><path d="M710 100 V165" stroke="#ffb454"/></g>
-<g fill="#102b43" stroke="#35d6e8" stroke-width="2"><rect x="30" y="65" width="150" height="70" rx="10"/><rect x="220" y="65" width="100" height="70" rx="10"/><rect x="440" y="65" width="100" height="70" rx="10"/><rect x="680" y="65" width="170" height="70" rx="10"/></g>
-<g fill="#eaf3fb" font-size="19" text-anchor="middle" font-weight="600"><text x="105" y="94">Chua diode</text><text x="105" y="118" font-size="13">Nonlinear element</text><text x="270" y="106">C₁</text><text x="490" y="106">L</text><text x="765" y="94">State-space</text><text x="765" y="118" font-size="13">response / plots</text></g>
-<g fill="#ffb454" font-size="14" text-anchor="middle"><text x="270" y="190">v₁ state</text><text x="490" y="190">inductor current</text><text x="710" y="190">C₂ / v₂ state</text></g>
-<text x="450" y="32" text-anchor="middle" fill="#9bb0c4" font-size="14">Conceptual functional representation (not a wiring diagram)</text></svg>
-</div>
-<div class="topgrid">
-<div class="panel"><h2>Time-domain response</h2><div class="canvas-wrap"><canvas id="time"></canvas></div><div class="legend"><span><i class="dot" style="background:#35d6e8"></i>x(t)</span><span><i class="dot" style="background:#ffb454"></i>y(t)</span><span><i class="dot" style="background:#b99cff"></i>z(t)</span></div></div>
-<div class="panel"><h2>Phase-plane portrait</h2><div class="canvas-wrap"><canvas id="phase"></canvas></div><div class="legend"><span><i class="dot" style="background:#35d6e8"></i>x versus y</span></div></div>
-</div>
-<div class="panel wide"><h2>Double-scroll attractor · x versus z</h2><div class="canvas-wrap"><canvas id="attractor"></canvas></div><div class="stats"><div class="stat"><small>Simulation time</small><strong id="clock">0.00</strong></div><div class="stat"><small>Samples</small><strong id="samples">0</strong></div><div class="stat"><small>Current x state</small><strong id="cx">0.100</strong></div></div></div>
-<div class="panel"><h2>Mathematical model</h2>
-<p><b>Dimensionless Chua equations:</b></p>
-<p style="font-family:Georgia,serif;font-size:18px;color:#fff">ẋ = α [y − x − h(x)]</p>
-<p style="font-family:Georgia,serif;font-size:18px;color:#fff">ẏ = x − y + z</p>
-<p style="font-family:Georgia,serif;font-size:18px;color:#fff">ż = −βy</p>
-<p>Piecewise-linear Chua diode characteristic:</p>
-<p style="font-family:Georgia,serif;font-size:17px;color:#fff">h(x) = m₁x + ½(m₀−m₁)(|x+1|−|x−1|)</p>
-<p class="note">α and β control the normalized dynamics; m₀ and m₁ are the inner and outer slopes of the nonlinear characteristic. The classic preset is a commonly used dimensionless parameter set; outcomes depend on integration step and initial conditions.</p>
-</div>
-</section></main><footer>Virtual laboratory demonstration for educational analysis. Use the controls to explore parameter sensitivity, transient behaviour and phase-space structure.</footer>
-<script src="js/main.js"></script>
-</body></html>
+const $=id=>document.getElementById(id);
+const defaults={alpha:15.6,beta:28,m0:-1.143,m1:-0.714,dt:.005};
+const specs=[['alpha',8,20,.1],['beta',15,35,.5],['m0',-1.6,-.6,.001],['m1',-1.1,-.2,.001],['dt',.001,.01,.001]];
+let p={...defaults}, state=[.1,0,0], t=0, running=false, data=[], frame=0;
+const controls=$('controls');
+specs.forEach(([k,min,max,step])=>{let wrap=document.createElement('div');wrap.innerHTML=`<label>${k.toUpperCase()} <span class="value" id="${k}v">${p[k]}</span></label><input id="${k}" type="range" min="${min}" max="${max}" step="${step}" value="${p[k]}">`;controls.appendChild(wrap);$(k).addEventListener('input',()=>{p[k]=+$(k).value;$(k+'v').textContent=p[k].toFixed(k==='m0'||k==='m1'?3:2)})});
+['x0','y0','z0'].forEach(k=>$(k).addEventListener('input',()=>$(k+'v').textContent=(+$(k).value).toFixed(2)));
+function deriv(s){let [x,y,z]=s, h=p.m1*x+.5*(p.m0-p.m1)*(Math.abs(x+1)-Math.abs(x-1));return [p.alpha*(y-x-h),x-y+z,-p.beta*y]}
+function add(a,b,f){return a.map((v,i)=>v+b[i]*f)}
+function rk4(s,dt){let k1=deriv(s),k2=deriv(add(s,k1,dt/2)),k3=deriv(add(s,k2,dt/2)),k4=deriv(add(s,k3,dt));return s.map((v,i)=>v+dt*(k1[i]+2*k2[i]+2*k3[i]+k4[i])/6)}
+function reset(){running=false;state=[$('x0').value*1,$('y0').value*1,$('z0').value*1];t=0;data=[];draw()}
+function step(){for(let i=0;i<5;i++){state=rk4(state,p.dt);t+=p.dt;if(state.some(v=>!Number.isFinite(v)||Math.abs(v)>1e5)){reset();return}if(data.length<30000)data.push({t,x:state[0],y:state[1],z:state[2]})}}
+function axes(ctx,w,h){ctx.clearRect(0,0,w,h);ctx.strokeStyle='#29435a';ctx.lineWidth=1;for(let i=1;i<5;i++){ctx.beginPath();ctx.moveTo(w*i/5,0);ctx.lineTo(w*i/5,h);ctx.stroke();ctx.beginPath();ctx.moveTo(0,h*i/5);ctx.lineTo(w,h*i/5);ctx.stroke()}}
+function plot(id,series,rangeX,rangeY){let c=$(id),ctx=c.getContext('2d'),w=c.width=c.clientWidth*devicePixelRatio,h=c.height=c.clientHeight*devicePixelRatio;axes(ctx,w,h);let left=36*devicePixelRatio,right=10*devicePixelRatio,top=10*devicePixelRatio,bottom=22*devicePixelRatio,pw=w-left-right,ph=h-top-bottom;let [xmin,xmax]=rangeX,[ymin,ymax]=rangeY;
+series.forEach(s=>{ctx.strokeStyle=s.color;ctx.lineWidth=1.5*devicePixelRatio;ctx.beginPath();let first=true;data.forEach((d,i)=>{if(i%Math.max(1,Math.floor(data.length/5000)))return;let xx=left+(d[s.x]-xmin)/(xmax-xmin)*pw,yy=top+ph-(d[s.y]-ymin)/(ymax-ymin)*ph;if(first){ctx.moveTo(xx,yy);first=false}else ctx.lineTo(xx,yy)});ctx.stroke()});
+ctx.fillStyle='#9bb0c4';ctx.font=`${11*devicePixelRatio}px Arial`;ctx.fillText(ymin.toFixed(1),2,h-8);ctx.fillText(ymax.toFixed(1),2,14);ctx.fillText(xmin.toFixed(1),left,h-5);ctx.fillText(xmax.toFixed(1),w-40,h-5)}
+function draw(){if(!data.length)data=[{t:0,x:state[0],y:state[1],z:state[2]}];let tail=data.slice(-1800),xs=tail.map(d=>d.t),lo=Math.min(...xs),hi=Math.max(...xs);if(hi===lo)hi=lo+1;
+let extent=(key)=>{let a=tail.map(d=>d[key]);let mn=Math.min(...a),mx=Math.max(...a),pad=Math.max(.5,(mx-mn)*.08);return [mn-pad,mx+pad]};
+plot('time',[{x:'t',y:'x',color:'#35d6e8'},{x:'t',y:'y',color:'#ffb454'},{x:'t',y:'z',color:'#b99cff'}],[lo,hi],[-8,8]);
+plot('phase',[{x:'x',y:'y',color:'#35d6e8'}],[-4,4],[-4,4]);
+plot('attractor',[{x:'x',y:'z',color:'#35d6e8'}],[-4,4],[-5,5]);
+$('clock').textContent=t.toFixed(2);$('samples').textContent=data.length;$('cx').textContent=state[0].toFixed(3)}
+function loop(){if(running){step();draw()}requestAnimationFrame(loop)}
+$('start').onclick=()=>{running=true};$('pause').onclick=()=>running=false;$('reset').onclick=reset;
+$('preset').onclick=()=>{p={...defaults};specs.forEach(([k])=>{$(k).value=p[k];$(k+'v').textContent=p[k].toFixed(k==='m0'||k==='m1'?3:2)});reset()};
+$('download').onclick=()=>{let rows=['time,x,y,z',...data.map(d=>[d.t,d.x,d.y,d.z].join(','))].join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows],{type:'text/csv'}));a.download='chuas-circuit-data.csv';a.click();URL.revokeObjectURL(a.href)};
+reset();loop();window.addEventListener('resize',draw);
+
 
