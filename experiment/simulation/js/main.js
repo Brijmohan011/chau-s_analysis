@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chua's Circuit | Virtual Laboratory</title>
+<head>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 <header><div class="kicker">ELECTRONICS • NONLINEAR DYNAMICS • VIRTUAL LAB</div><h1>Chua's Circuit Analysis for Electronic Chaos Generation</h1><p>Interactive numerical experiment · Dimensionless state-space model · Double-scroll attractor</p></header>
@@ -39,5 +46,6 @@
 <p class="note">α and β control the normalized dynamics; m₀ and m₁ are the inner and outer slopes of the nonlinear characteristic. The classic preset is a commonly used dimensionless parameter set; outcomes depend on integration step and initial conditions.</p>
 </div>
 </section></main><footer>Virtual laboratory demonstration for educational analysis. Use the controls to explore parameter sensitivity, transient behaviour and phase-space structure.</footer>
-<script>
-//Your JavaScript goes in here
+<script src="js/main.js"></script>
+</body></html>
+
